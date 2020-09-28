@@ -9,6 +9,12 @@ Run the following npm command in your Node-RED user directory (typically ~/.node
 npm install bartbutenaers/node-red-contrib-button-events
 ```
 
+## Support my Node-RED developments
+
+Please buy my wife a coffee to keep her happy, while I am busy developing Node-RED stuff for you ...
+
+<a href="https://www.buymeacoffee.com/bartbutenaers" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy my wife a coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
 ## Node Usage
 
 When a `0` or `1` arrives in the specified input message field (arriving e.g. from a button connected to a GPIO input node), then this node will determine which kind of event has occured and send the event type in the specified output message field:
