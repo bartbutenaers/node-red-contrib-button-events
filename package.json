@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "A Node-RED node to send events based on button actions",
     "dependencies": {
-       "button-events": "bnielsen1965/button-events"
+       "button-events": "^1.0.0"
     },
     "author": {
         "name": "Bart Butenaers"
