@@ -59,6 +59,16 @@
     </div>
     <br>
     <div class="form-row">
+        <label style="padding-top: 8px" for="node-input-inputField"><i class="fa fa-sign-in"></i> Input</label>
+        <input type="text" id="node-input-inputField" style="width:70%">
+        <input type="hidden" id="node-input-inputFieldType">
+    </div>
+    <div class="form-row">
+        <label style="padding-top: 8px" for="node-input-outputField"><i class="fa fa-sign-in"></i> Output</label>
+        <input type="text" id="node-input-outputField" style="width:70%">
+        <input type="hidden" id="node-input-outputFieldType">
+    </div>
+    <div class="form-row">
         <label for="node-input-clickedInterval"><i class="fa fa-table"></i> Clicked</span></label>
         <input type="number" id="node-input-clickedInterval">
     </div>
@@ -77,5 +87,24 @@
 </script>
 
 <script type="text/x-red" data-help-name="button-events">
-    <p>A Node-RED node to send events based on button actions.</p>    
+    <p>A Node-RED node to send events based on button actions.</p>
+    <p>When a <code>0</code> or <code>1</code> arrives in the input msg, then the detected event will be send in the output msg:
+        <ul>
+            <li><b><i>pressed</i></b>: when a button is pressed and held down. This will be followed with a <code>released</code> event, as soon as the button is released.</li>
+            <li><b><i>clicked</i></b>: when a button is pressed and released rapidly.</li>
+            <li><b><i>clicked_pressed</i></b>: when a click is quickly followed by pressing and holding the button.  This will be followed by a <code>released</code> event, as soon as the button is released.</li>
+            <li><b><i>double_clicked</i></b>: when a click is quickly followed with another click.</li>
+            <li><b><i>released</i></b>: when the pressed button is released.</li>
+        </ul>
+    </p>
+    <p><strong>Input:</strong><br/>	
+    The input message field where the input value (0 or 1) will arrive.</p>
+    <p><strong>Output:</strong><br/>	
+    The output message field where the detected event type will be stored.</p>
+    <p><strong>Clicked:</strong><br/>	
+    The interval (in milliseconds) to wait - after a button is released - before generating a <code>clicked</code> event.</p>
+    <p><strong>Pressed:</strong><br/>	
+    The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event.</p>
+    <p><strong>Debounce:</strong><br/>	
+    The interval (in milliseconds) to wait before considering the input signal to have stabilized.</p>
 </script>
