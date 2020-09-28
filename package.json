@@ -1,0 +1,36 @@
+{
+    "name": "node-red-contrib-button-events",
+    "version": "1.0.0",
+    "description": "A Node-RED node to send events based on button actions",
+    "dependencies": {
+       "bnielsen1965/button-events": "^1.0.0"
+    },
+    "author": {
+        "name": "Bart Butenaers"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "node-red",
+        "button",
+        "debounce",
+        "click",
+        "single",
+        "double",
+        "long",
+        "press",
+        "gpio"
+    ],   
+    "bugs": {
+        "url": "https://github.com/bartbutenaers/node-red-contrib-button-events/issues"
+    },
+    "homepage": "https://github.com/bartbutenaers/node-red-contrib-button-events",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bartbutenaers/node-red-contrib-button-events.git"
+    },
+    "node-red": {
+        "nodes": {
+            "button-events": "button_events.js"
+        }
+    }
+}
