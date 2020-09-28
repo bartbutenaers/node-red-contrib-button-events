@@ -72,10 +72,7 @@
         });
       
         node.on("close",function() { 
-            // TODO De timer stoppen !  Gaat dit zo???
-			if (node.buttonEvents.emitTimer) {
-				clearTimeout(node.buttonEvents.emitTimer);
-			}
+            node.buttonEvents.cleanup();
             
             node.status({ });
         });
