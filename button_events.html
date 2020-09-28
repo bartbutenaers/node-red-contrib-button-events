@@ -1,0 +1,81 @@
+<!--
+  Copyright 2020, Bart Butenaers
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<script type="text/javascript">
+(function() {
+    RED.nodes.registerType('button-events',{
+        category: 'function',
+        color: '#E9967A',
+        defaults: {
+            name: {value:""},      
+            inputField: {value: "payload", required: true, validate: RED.validators.typedInput("inputFieldType")},
+            inputFieldType: {value: "msg"},
+            outputField: {value: "payload", required: true, validate: RED.validators.typedInput("outputFieldType")},
+            outputFieldType: {value: "msg"},
+            usePullUp : {value: true},
+            clickedInterval: {value: 200},
+            pressedInterval: {value: 200},
+            debounceInterval: {value: 30}
+        },        
+        inputs:1,
+        outputs:1,
+        icon: "font-awesome/fa-barcode",
+        label: function() {
+            return this.name || "Button events";
+        },
+        oneditprepare: function() {
+            var node = this;
+            debugger
+            $('#node-input-inputField').typedInput({
+                typeField: $("#node-input-inputFieldType"),
+                types: ['msg']
+            });
+            $('#node-input-outputField').typedInput({
+                typeField: $("#node-input-outputFieldType"),
+                types: ['msg']
+            });
+        },
+        oneditsave: function() {
+            var node = this;
+
+        }
+    });
+})();
+</script>
+
+<script type="text/x-red" data-template-name="button-events">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <br>
+    <div class="form-row">
+        <label for="node-input-clickedInterval"><i class="fa fa-table"></i> Clicked</span></label>
+        <input type="number" id="node-input-clickedInterval">
+    </div>
+    <div class="form-row">
+        <label for="node-input-pressedInterval"><i class="fa fa-table"></i> Pressed</span></label>
+        <input type="number" id="node-input-pressedInterval">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debounceInterval"><i class="fa fa-table"></i> Debounce</span></label>
+        <input type="number" id="node-input-debounceInterval">
+    </div>
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-usePullUp" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-usePullUp" style="width:70%;"> Is pullup resistor used at GPIO input?</label>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="button-events">
+    <p>A Node-RED node to send events based on button actions.</p>    
+</script>
