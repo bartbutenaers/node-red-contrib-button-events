@@ -17,6 +17,22 @@
     var settings = RED.settings;
     const ButtonEvents = require('button-events');
     
+    function handleEvent(node, eventType) {
+        var outputMsg = {};
+            
+        try {
+            RED.util.setMessageProperty(outputMsg, node.outputField, eventType);
+        }
+        catch (err) {
+            node.error('Output property msg.' + node.outputField + ' cannot be set.');
+            return;
+        }
+        
+        node.send(outputMsg);
+        
+        node.status({fill:"blue", shape:"dot", text:eventType});
+    }
+    
     function ButtonEventsNode(config) {
         RED.nodes.createNode(this, config);
         this.inputField  = config.inputField;
@@ -24,8 +40,14 @@
         
         var node = this;
         
+        // The idle value tells us whether a pull-up resistor has been used on the GPIO input
+        var usePullUp = false;
+        if (config.idleValue === "1") {
+            usePullUp = true;
+        }
+        
         const settings = {
-		  usePullUp: config.usePullUp,
+		  usePullUp: usePullUp,
 		  timing: {
 			debounce: config.debounceInterval,
 			pressed: config.pressedInterval,
@@ -35,21 +57,53 @@
 
 		node.buttonEvents = new ButtonEvents(settings);
 
-		node.buttonEvents.on('button_event', function(eventType) {
-            var outputMsg = {};
-            
-			try {
-                RED.util.setMessageProperty(outputMsg, node.outputField, eventType);
-            }
-            catch (err) {
-                node.error('Output property msg.' + node.outputField + ' cannot be set.');
-                return;
-            }
-            
-            node.send(outputMsg);
-            
-            node.status({fill:"blue", shape:"dot", text:eventType});
-		});
+        if (config.triggerPressed) {
+            node.buttonEvents.on('pressed', function() {
+                handleEvent(node, 'pressed');
+            });
+        }
+        
+        if (config.triggerClicked) {
+            node.buttonEvents.on('clicked', function() {
+                handleEvent(node, 'clicked');
+            });
+        }
+
+        if (config.triggerClickedPressed) {
+            node.buttonEvents.on('clicked_pressed', function() {
+                handleEvent(node, 'clicked_pressed');
+            });
+        }
+
+        if (config.triggerDoubleClicked) {
+            node.buttonEvents.on('double_clicked', function() {
+                handleEvent(node, 'double_clicked');
+            });
+        }
+
+        if (config.triggerReleased) {
+            node.buttonEvents.on('released', function() {
+                handleEvent(node, 'released');
+            });
+        }
+
+        if (config.buttonChanged) {
+            node.buttonEvents.on('button_changed', function() {
+                handleEvent(node, 'button_changed');
+            });
+        }  
+
+        if (config.buttonPress) {
+            node.buttonEvents.on('button_press', function() {
+                handleEvent(node, 'button_press');
+            });
+        }   
+
+        if (config.buttonRelease) {
+            node.buttonEvents.on('button_release', function() {
+                handleEvent(node, 'button_release');
+            });
+        }           
 
         node.on("input", function(msg) {  
             var inputValue;
