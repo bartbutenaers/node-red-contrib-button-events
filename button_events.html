@@ -21,10 +21,18 @@
             inputFieldType: {value: "msg"},
             outputField: {value: "payload", required: true, validate: RED.validators.typedInput("outputFieldType")},
             outputFieldType: {value: "msg"},
-            usePullUp : {value: true},
+            idleValue : {value: "1"},
             clickedInterval: {value: 200},
             pressedInterval: {value: 200},
-            debounceInterval: {value: 30}
+            debounceInterval: {value: 30},
+            triggerPressed: {value: true},
+            triggerClicked: {value: true},
+            triggerClickedPressed: {value: true},
+            triggerDoubleClicked: {value: true},
+            triggerReleased: {value: true},
+            buttonChanged: {value: false},
+            buttonPress: {value: false},
+            buttonRelease: {value: false}
         },        
         inputs:1,
         outputs:1,
@@ -80,10 +88,47 @@
         <label for="node-input-debounceInterval"><i class="fa fa-table"></i> Debounce</span></label>
         <input type="number" id="node-input-debounceInterval">
     </div>
-    <div class="form-row">    
-        <input type="checkbox" id="node-input-usePullUp" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-usePullUp" style="width:70%;"> Is pullup resistor used at GPIO input?</label>
+    <div class="form-row">
+        <label for="node-input-idleValue"><i class="fa fa-list"></i> Idle value</label>
+        <select id="node-input-idleValue">
+            <option value="1">1 (high/pullup)</option>
+            <option value="0">0 (low/pulldown)</option>
+        </select>
     </div>
+    <br>
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-triggerPressed" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-triggerPressed" style="width:70%;"> Trigger the "pressed" user intent event</label>
+    </div>
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-triggerClicked" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-triggerClicked" style="width:70%;"> Trigger the "clicked" user intent event</label>
+    </div>    
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-triggerClickedPressed" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-triggerClickedPressed" style="width:70%;"> Trigger the "clicked_pressed" user intent event</label>
+    </div>      
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-triggerDoubleClicked" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-triggerDoubleClicked" style="width:70%;"> Trigger the "double_clicked" user intent event</label>
+    </div>      
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-triggerReleased" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-triggerReleased" style="width:70%;"> Trigger the "released" user intent event</label>
+    </div>    
+    <br>
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-buttonChanged" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-buttonChanged" style="width:70%;"> Trigger the "button_changed" internal event</label>
+    </div> 
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-buttonPress" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-buttonPress" style="width:70%;"> Trigger the "button_press" internal event</label>
+    </div> 
+    <div class="form-row">    
+        <input type="checkbox" id="node-input-buttonRelease" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-buttonRelease" style="width:70%;"> Trigger the "button_release" internal event</label>
+    </div> 
 </script>
 
 <script type="text/x-red" data-help-name="button-events">
@@ -107,4 +152,6 @@
     The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event.</p>
     <p><strong>Debounce:</strong><br/>	
     The interval (in milliseconds) to wait before considering the input signal to have stabilized.</p>
+    <p><strong>Idle value:</strong><br/>	
+    The idle value of the input, i.e. the value of the signal when the button is not being pressed.  This can be <code>1</code> when the GPIO input has a pull-up resistor, or <code>0</code> in case of a pull-down resistor.</p>
 </script>
