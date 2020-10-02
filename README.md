@@ -30,19 +30,25 @@ When a `0` or `1` arrives in the specified input message field (arriving e.g. fr
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), then the `clicked` event will be send:
 
-![Single click](https://user-images.githubusercontent.com/14224149/94895529-eb534400-048b-11eb-8757-91b622a0d9b2.png)
+![Single click](https://user-images.githubusercontent.com/14224149/94899160-142b0780-0493-11eb-83c8-fe181b18f9eb.png)
 
 ### Long-press timeline
 
 When the button is clicked and kept down some time (i.e. *released after "Pressed" time interval*), then the `released` event will be send:
 
-![Long press](https://user-images.githubusercontent.com/14224149/94895666-2a819500-048c-11eb-8f86-fccca530827b.png)
+![Long press](https://user-images.githubusercontent.com/14224149/94899214-33299980-0493-11eb-8f03-5be40ff21472.png)
 
 ### Double-click timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is clicked again immediately afterwards (i.e. *clicked again within the "Clicked" time interval*).  Then the `double-clicked` event will be send:
 
-![Double click](https://user-images.githubusercontent.com/14224149/94895755-4be28100-048c-11eb-8b28-e6857adfe24c.png)
+![Double click](https://user-images.githubusercontent.com/14224149/94899285-53595880-0493-11eb-8c35-8da5ed73b5ad.png)
+
+### Clicked-pressed timeline
+
+When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is long clicked immediately afterwards (i.e. *long pressed again within the "Clicked" time interval*).  Then the `clicked-pressed` event will be send:
+
+![Clicked pressed](https://user-images.githubusercontent.com/14224149/94899382-7f74d980-0493-11eb-9dd1-90be390dda8c.png)
 
 ## Node properties
 
