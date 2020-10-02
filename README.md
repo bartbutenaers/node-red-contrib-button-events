@@ -26,6 +26,8 @@ When a `0` or `1` arrives in the specified input message field (arriving e.g. fr
 
 ## Timelines
 
+The following timelines show how the button input is watched in the specified time intervals, and when which events are send in the output message.  The low-level events (which normally won't be used) are shown in blue, while the important user intent events are shown in red.
+
 ### Single-click timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), then the `clicked` event will be send:
