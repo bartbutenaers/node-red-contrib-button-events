@@ -96,36 +96,50 @@
         </select>
     </div>
     <br>
-    <div class="form-row">    
+    <div class="form-row" style="margin-bottom:0;">
+        <label><i class="fa fa-list"></i> User intent</label>
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>    
         <input type="checkbox" id="node-input-triggerPressed" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-triggerPressed" style="width:70%;"> Trigger the "pressed" user intent event</label>
     </div>
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>
         <input type="checkbox" id="node-input-triggerClicked" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-triggerClicked" style="width:70%;"> Trigger the "clicked" user intent event</label>
     </div>    
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>
         <input type="checkbox" id="node-input-triggerClickedPressed" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-triggerClickedPressed" style="width:70%;"> Trigger the "clicked_pressed" user intent event</label>
     </div>      
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>    
         <input type="checkbox" id="node-input-triggerDoubleClicked" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-triggerDoubleClicked" style="width:70%;"> Trigger the "double_clicked" user intent event</label>
     </div>      
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>
         <input type="checkbox" id="node-input-triggerReleased" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-triggerReleased" style="width:70%;"> Trigger the "released" user intent event</label>
     </div>    
     <br>
-    <div class="form-row">    
+    <div class="form-row" style="margin-bottom:0;">
+        <label><i class="fa fa-list"></i> Low level</label>
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
         <input type="checkbox" id="node-input-buttonChanged" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-buttonChanged" style="width:70%;"> Trigger the "button_changed" internal event</label>
     </div> 
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>    
         <input type="checkbox" id="node-input-buttonPress" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-buttonPress" style="width:70%;"> Trigger the "button_press" internal event</label>
     </div> 
-    <div class="form-row">    
+    <div class="form-row">
+        <label>&nbsp;</label>
         <input type="checkbox" id="node-input-buttonRelease" style="display: inline-block; width: auto; vertical-align: top;">
         <label for="node-input-buttonRelease" style="width:70%;"> Trigger the "button_release" internal event</label>
     </div> 
@@ -133,7 +147,21 @@
 
 <script type="text/x-red" data-help-name="button-events">
     <p>A Node-RED node to send events based on button actions.</p>
-    <p>When a <code>0</code> or <code>1</code> arrives in the input msg, then the detected event will be send in the output msg:
+    <p>When a button value (<code>0</code> or <code>1</code>) arrives in the input msg, this node will determine the event type.  See the <a target="_blank" href="https://github.com/bartbutenaers/node-red-contrib-button-events">readme</a> on Github for more information and timeline diagrams!</p>
+    <p><strong>Input:</strong><br/>	
+    The input message field where the button value (<code>0</code> or <code>1</code>) will arrive.</p>
+    <p><strong>Output:</strong><br/>	
+    The output message field where the detected event type will be stored.</p>
+    <p><strong>Clicked:</strong><br/>	
+    The interval (in milliseconds) to wait - after a button is released - before generating a <code>clicked</code> event.  When a second click arrives within the "Clicked" interval, then both clicks will be combined to a <code>double-click</code> event.</p>
+    <p><strong>Pressed:</strong><br/>	
+    The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event. When the button is not being released within this interval, the button is kept down (e.g. for dimming a light).</p>
+    <p><strong>Debounce:</strong><br/>	
+    The interval (in milliseconds) to wait before considering the input signal to have stabilized.  Within this time interval, all new input messages that arrive will be ignored.</p>
+    <p><strong>Idle value:</strong><br/>	
+    The idle value of the input, i.e. the value of the signal when the button is not being pressed.  This can be <code>1</code> when the GPIO input has a pull-up resistor, or <code>0</code> in case of a pull-down resistor.</p>
+    <p><strong>User intent:</strong><br/>	
+    Specify which events (that indicate user intent) will be send as an output message:   
         <ul>
             <li><b><i>pressed</i></b>: when a button is pressed and held down. This will be followed with a <code>released</code> event, as soon as the button is released.</li>
             <li><b><i>clicked</i></b>: when a button is pressed and released rapidly.</li>
@@ -142,16 +170,12 @@
             <li><b><i>released</i></b>: when the pressed button is released.</li>
         </ul>
     </p>
-    <p><strong>Input:</strong><br/>	
-    The input message field where the input value (0 or 1) will arrive.</p>
-    <p><strong>Output:</strong><br/>	
-    The output message field where the detected event type will be stored.</p>
-    <p><strong>Clicked:</strong><br/>	
-    The interval (in milliseconds) to wait - after a button is released - before generating a <code>clicked</code> event.</p>
-    <p><strong>Pressed:</strong><br/>	
-    The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event.</p>
-    <p><strong>Debounce:</strong><br/>	
-    The interval (in milliseconds) to wait before considering the input signal to have stabilized.</p>
-    <p><strong>Idle value:</strong><br/>	
-    The idle value of the input, i.e. the value of the signal when the button is not being pressed.  This can be <code>1</code> when the GPIO input has a pull-up resistor, or <code>0</code> in case of a pull-down resistor.</p>
+    <p><strong>Low level:</strong><br/>	
+    Specify which low-level events will be send as an output message:   
+        <ul>
+            <li><b><i>button_changed</i></b>: when a button is pressed or released.</li>
+            <li><b><i>button_press</i></b>: when a button is pressed.</li>
+            <li><b><i>button_release</i></b>: when a button is released.</li>
+        </ul>
+    Note that the user intent events are sufficient in most cases, and that the low-level events are only required in special circumstances!</p>    
 </script>
