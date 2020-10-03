@@ -21,6 +21,10 @@
             inputFieldType: {value: "msg"},
             outputField: {value: "payload", required: true, validate: RED.validators.typedInput("outputFieldType")},
             outputFieldType: {value: "msg"},
+            downValue: {value: "0", required: true, validate: RED.validators.typedInput("downValueType")},
+            downValueType: {value: "num"},
+            upValue: {value: "1", required: true, validate: RED.validators.typedInput("upValueType")},
+            upValueType: {value: "num"},
             idleValue : {value: "1"},
             clickedInterval: {value: 200},
             pressedInterval: {value: 200},
@@ -42,7 +46,7 @@
         },
         oneditprepare: function() {
             var node = this;
-            debugger
+          
             $('#node-input-inputField').typedInput({
                 typeField: $("#node-input-inputFieldType"),
                 types: ['msg']
@@ -50,6 +54,14 @@
             $('#node-input-outputField').typedInput({
                 typeField: $("#node-input-outputFieldType"),
                 types: ['msg']
+            });
+            $('#node-input-downValue').typedInput({
+                typeField: $("#node-input-downValueType"),
+                types: ['num', 'bool', 'str']
+            });
+            $('#node-input-upValue').typedInput({
+                typeField: $("#node-input-upValueType"),
+                types: ['num', 'bool', 'str']
             });
         },
         oneditsave: function() {
@@ -89,11 +101,14 @@
         <input type="number" id="node-input-debounceInterval">
     </div>
     <div class="form-row">
-        <label for="node-input-idleValue"><i class="fa fa-list"></i> Idle value</label>
-        <select id="node-input-idleValue">
-            <option value="1">1 (high/pullup)</option>
-            <option value="0">0 (low/pulldown)</option>
-        </select>
+        <label style="padding-top: 8px" for="node-input-downValue"><i class="fa fa-hand-o-down"></i> Down value</label>
+        <input type="text" id="node-input-downValue" style="width:70%">
+        <input type="hidden" id="node-input-downValueType">
+    </div>
+    <div class="form-row">
+        <label style="padding-top: 8px" for="node-input-upValue"><i class="fa fa-hand-o-up"></i> Up value</label>
+        <input type="text" id="node-input-upValue" style="width:70%">
+        <input type="hidden" id="node-input-upValueType">
     </div>
     <br>
     <div class="form-row" style="margin-bottom:0;">
@@ -147,9 +162,9 @@
 
 <script type="text/x-red" data-help-name="button-events">
     <p>A Node-RED node to send events based on button actions.</p>
-    <p>When a button value (<code>0</code> or <code>1</code>) arrives in the input msg, this node will determine the event type.  See the <a target="_blank" href="https://github.com/bartbutenaers/node-red-contrib-button-events">readme</a> on Github for more information and timeline diagrams!</p>
+    <p>When a button value (low or high) arrives in the input msg, this node will determine the event type.  See the <a target="_blank" href="https://github.com/bartbutenaers/node-red-contrib-button-events">readme</a> on Github for more information and timeline diagrams!</p>
     <p><strong>Input:</strong><br/>	
-    The input message field where the button value (<code>0</code> or <code>1</code>) will arrive.</p>
+    The input message field where the button value (the low or high value) will arrive.</p>
     <p><strong>Output:</strong><br/>	
     The output message field where the detected event type will be stored.</p>
     <p><strong>Clicked:</strong><br/>	
@@ -158,8 +173,10 @@
     The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event. When the button is not being released within this interval, the button is kept down (e.g. for dimming a light).</p>
     <p><strong>Debounce:</strong><br/>	
     The interval (in milliseconds) to wait before considering the input signal to have stabilized.  Within this time interval, all new input messages that arrive will be ignored.</p>
-    <p><strong>Idle value:</strong><br/>	
-    The idle value of the input, i.e. the value of the signal when the button is not being pressed.  This can be <code>1</code> when the GPIO input has a pull-up resistor, or <code>0</code> in case of a pull-down resistor.</p>
+    <p><strong>Down value:</strong><br/>	
+    The value that will arrive when the button is down (i.e. clicked or pressed).  This can be high when the GPIO input has a pull-up resistor, or low in case of a pull-down resistor.</p>
+    <p><strong>Up value:</strong><br/>	
+    The value that will arrive when the button is up (i.e. in normal status).  This can be high when the GPIO input has a pull-up resistor, or low in case of a pull-down resistor.</p>
     <p><strong>User intent:</strong><br/>	
     Specify which events (that indicate user intent) will be send as an output message:   
         <ul>
