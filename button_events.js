@@ -37,17 +37,14 @@
         RED.nodes.createNode(this, config);
         this.inputField  = config.inputField;
         this.outputField = config.outputField;
+        this.downValue   = config.downValue;
+        this.upValue     = config.upValue;
         
         var node = this;
         
-        // The idle value tells us whether a pull-up resistor has been used on the GPIO input
-        var usePullUp = false;
-        if (config.idleValue === "1") {
-            usePullUp = true;
-        }
-        
+        // We act like there is no pull-up resister (in case of a GPIO input): see below for more info...
         const settings = {
-		  usePullUp: usePullUp,
+		  usePullUp: false,
 		  timing: {
 			debounce: config.debounceInterval,
 			pressed: config.pressedInterval,
@@ -117,9 +114,19 @@
                 return;
             }
             
-            if (inputValue != 0 && inputValue != 1) {
-                node.error('Input property msg.' + node.inputField + ' should contain 0 or 1.');
-                return;                
+            // The button-events library always expects a 0 or 1 as input value, the button down/up values need to be mapped.
+            // We have specified above that usePullUp=false, which means (similar to a pull-down resistor behaviour) that:
+            // - A button down means that we measure a '1' (high signal)
+            // - A button up means that we measure a '0' (low signal)
+            if (inputValue == node.downValue) {
+                inputValue = 1;
+            }
+            else if (inputValue == node.upValue) {
+                inputValue = 0;
+            }
+            else {
+                node.error('Input property msg.' + node.inputField + ' should contain the specified low or high value.');
+                return;
             }
             
             node.buttonEvents.gpioChange(inputValue)
