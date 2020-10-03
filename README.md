@@ -23,7 +23,7 @@ When the value of a button changes (`0` or `1`), this node will determine the ki
 + A long press (i.e. keeping the button pressed)
 + A single click followed by a long press
 
-Physical buttons can be read in many different ways, but a common case for Node-RED is via the GPIO input pin of a Raspberry Pi:
+Physical buttons can be read in many different ways, but a common case for Node-RED is (via an optocoupler) to the GPIO input pin of a Raspberry Pi:
 + Use a pull-up resistor to make sure the (idle) signal is `1`, and the button can pull the signal to `0` (gnd).
 + Use a pull-down resistor to make sure the (idle) signal is `0`, and the button can pull the signal `1` (vcc).
 
@@ -59,7 +59,7 @@ When the button is clicked and kept down some time (i.e. *released after "Presse
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is clicked again immediately afterwards (i.e. *clicked again within the "Clicked" time interval*).  Then the `double-clicked` event will be send:
 
-![Double click](https://user-images.githubusercontent.com/14224149/94899285-53595880-0493-11eb-8c35-8da5ed73b5ad.png)
+![Double click](https://user-images.githubusercontent.com/14224149/94997823-f9998100-05ad-11eb-926f-a10f9b8746fb.png)
 
 ### Clicked-pressed timeline
 
