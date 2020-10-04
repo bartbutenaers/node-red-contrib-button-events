@@ -17,20 +17,34 @@
     var settings = RED.settings;
     const ButtonEvents = require('button-events');
     
-    function handleEvent(node, eventType) {
-        var outputMsg = {};
+    function createEventHandler(node, outputIndex) {
+        var eventType = node.events[outputIndex].type;
+        
+        node.buttonEvents.on(eventType, function() {
+            var outputMsg = {};
+            var outputs = [];
+ 
+            try {
+                RED.util.setMessageProperty(outputMsg, node.outputField, eventType);
+            }
+            catch (err) {
+                node.error('Output property msg.' + node.outputField + ' cannot be set.');
+                return;
+            }
             
-        try {
-            RED.util.setMessageProperty(outputMsg, node.outputField, eventType);
-        }
-        catch (err) {
-            node.error('Output property msg.' + node.outputField + ' cannot be set.');
-            return;
-        }
-        
-        node.send(outputMsg);
-        
-        node.status({fill:"blue", shape:"dot", text:eventType});
+            for(var i = 0; i < node.events.length; i++) {
+                if (i === outputIndex) {
+                    outputs.push(outputMsg);
+                }
+                else {
+                    outputs.push(null);
+                }
+            }
+            
+            node.send(outputs);
+            
+            node.status({fill:"blue", shape:"dot", text:eventType});
+        });
     }
     
     function ButtonEventsNode(config) {
@@ -39,6 +53,7 @@
         this.outputField = config.outputField;
         this.downValue   = config.downValue;
         this.upValue     = config.upValue;
+        this.events      = config.events;
         
         var node = this;
         
@@ -54,53 +69,14 @@
 
 		node.buttonEvents = new ButtonEvents(settings);
 
-        if (config.triggerPressed) {
-            node.buttonEvents.on('pressed', function() {
-                handleEvent(node, 'pressed');
-            });
-        }
-        
-        if (config.triggerClicked) {
-            node.buttonEvents.on('clicked', function() {
-                handleEvent(node, 'clicked');
-            });
-        }
-
-        if (config.triggerClickedPressed) {
-            node.buttonEvents.on('clicked_pressed', function() {
-                handleEvent(node, 'clicked_pressed');
-            });
-        }
-
-        if (config.triggerDoubleClicked) {
-            node.buttonEvents.on('double_clicked', function() {
-                handleEvent(node, 'double_clicked');
-            });
-        }
-
-        if (config.triggerReleased) {
-            node.buttonEvents.on('released', function() {
-                handleEvent(node, 'released');
-            });
-        }
-
-        if (config.buttonChanged) {
-            node.buttonEvents.on('button_changed', function() {
-                handleEvent(node, 'button_changed');
-            });
-        }  
-
-        if (config.buttonPress) {
-            node.buttonEvents.on('button_press', function() {
-                handleEvent(node, 'button_press');
-            });
+        if (config.events) {
+            // Add an event handler for every specified event
+            for (var i = 0; i < config.events.length; i++) {
+                // Create the event handler inside a function, otherwise all handlers will use the latest 'i' value.
+                // See https://stackoverflow.com/questions/6487366/how-to-generate-event-handlers-with-loop-in-javascript
+                createEventHandler(node, i);
+            }
         }   
-
-        if (config.buttonRelease) {
-            node.buttonEvents.on('button_release', function() {
-                handleEvent(node, 'button_release');
-            });
-        }           
 
         node.on("input", function(msg) {  
             var inputValue;
