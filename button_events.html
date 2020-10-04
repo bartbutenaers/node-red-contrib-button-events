@@ -16,7 +16,8 @@
         category: 'function',
         color: '#E9967A',
         defaults: {
-            name: {value:""},      
+            name: {value:""},
+            outputs: {value:1}, // Standard field that will be used by Node-Red to draw N output ports in the flow editor            
             inputField: {value: "payload", required: true, validate: RED.validators.typedInput("inputFieldType")},
             inputFieldType: {value: "msg"},
             outputField: {value: "payload", required: true, validate: RED.validators.typedInput("outputFieldType")},
@@ -29,24 +30,21 @@
             clickedInterval: {value: 200},
             pressedInterval: {value: 200},
             debounceInterval: {value: 30},
-            triggerPressed: {value: true},
-            triggerClicked: {value: true},
-            triggerClickedPressed: {value: true},
-            triggerDoubleClicked: {value: true},
-            triggerReleased: {value: true},
-            buttonChanged: {value: false},
-            buttonPress: {value: false},
-            buttonRelease: {value: false}
+            events: {value: []}
         },        
         inputs:1,
-        outputs:1,
+        outputs:0,
+        outputLabels: function(index) {
+            // The label of the n-th output should be the n-th specified event type
+            return this.events[index].type;
+        },
         icon: "font-awesome/fa-barcode",
         label: function() {
             return this.name || "Button events";
         },
         oneditprepare: function() {
             var node = this;
-          
+
             $('#node-input-inputField').typedInput({
                 typeField: $("#node-input-inputFieldType"),
                 types: ['msg']
@@ -63,10 +61,71 @@
                 typeField: $("#node-input-upValueType"),
                 types: ['num', 'bool', 'str']
             });
+            
+            var arrayList = $("#node-input-events-container").css('min-height','250px').css('min-width','450px').editableList({
+                addItem: function(container,i,event) {
+                    container.css({
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                    });
+                    
+                    // Add a new row to the html table
+                    var row = $('<div/>').appendTo(container);
+                    
+                    // Column 1 : Dropdown with the event names
+                    var eventTypeField = $('<select/>',{class:"node-input-event-type",type:"text"}).css({"width":"40%","margin-left":"5px","margin-right":"5px"}).appendTo(row);
+                    $('<option />', {value: "clicked", text: "clicked"}).appendTo(eventTypeField);
+                    $('<option />', {value: "pressed", text: "pressed"}).appendTo(eventTypeField);
+                    $('<option />', {value: "clicked_pressed", text: "clicked_pressed"}).appendTo(eventTypeField);
+                    $('<option />', {value: "double_clicked", text: "double_clicked"}).appendTo(eventTypeField);
+                    $('<option />', {value: "released", text: "released"}).appendTo(eventTypeField);
+                    $('<option />', {value: "button_changed", text: "button_changed"}).appendTo(eventTypeField);
+                    $('<option />', {value: "button_press", text: "button_press"}).appendTo(eventTypeField);
+                    $('<option />', {value: "button_release", text: "button_release"}).appendTo(eventTypeField);
+                    eventTypeField.val(event.type || "clicked");
+        
+                    var index = $("#node-input-events-container").editableList('items').length;
+                    var outputIndexField = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
+                    outputIndexField.append(' &#8594; <span class="node-input-event-index">' + index + '</span> ');
+                },
+                removeItem: function(opt) {
+                    // When an event is removed from the list, all remaining items should get a new (output) index
+                    var items = $("#node-input-events-container").editableList('items');
+                    items.each(function(i) {
+                        $(this).find(".node-input-event-index").html(i + 1);
+                    });
+                },
+                sortItems: function(rules) {
+                    // When a event are resorted in the list, all items should get a new (output) index
+                    var items = $("#node-input-events-container").editableList('items');
+                    items.each(function(i) {
+                        $(this).find(".node-input-event-index").html(i + 1);
+                    });
+                },
+                removable: true,
+                sortable: true
+            });
+            
+            // Show all the events from the node in the editableList
+            if (node.events) {
+                for (var i = 0; i < node.events.length; i++) {
+                    arrayList.editableList('addItem', node.events[i]);
+                }
+            }
         },
         oneditsave: function() {
             var node = this;
-
+            
+            // Store the events from the editableList into this node
+            node.events = [];
+            var items = $("#node-input-events-container").editableList('items');
+            items.each(function(i) {
+                var eventType = $(this).find(".node-input-event-type").val();
+                node.events.push({type: eventType});
+            });
+            
+            // The number of outputs of this node should correspond to the number of events in the list
+            node.outputs = node.events.length;
         }
     });
 })();
@@ -112,52 +171,11 @@
     </div>
     <br>
     <div class="form-row" style="margin-bottom:0;">
-        <label><i class="fa fa-list"></i> User intent</label>
+        <label><i class="fa fa-list"></i> Events:</label>
     </div>
     <div class="form-row">
-        <label>&nbsp;</label>    
-        <input type="checkbox" id="node-input-triggerPressed" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-triggerPressed" style="width:70%;"> Trigger the "pressed" user intent event</label>
+        <ol id="node-input-events-container"></ol>
     </div>
-    <div class="form-row">
-        <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-triggerClicked" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-triggerClicked" style="width:70%;"> Trigger the "clicked" user intent event</label>
-    </div>    
-    <div class="form-row">
-        <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-triggerClickedPressed" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-triggerClickedPressed" style="width:70%;"> Trigger the "clicked_pressed" user intent event</label>
-    </div>      
-    <div class="form-row">
-        <label>&nbsp;</label>    
-        <input type="checkbox" id="node-input-triggerDoubleClicked" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-triggerDoubleClicked" style="width:70%;"> Trigger the "double_clicked" user intent event</label>
-    </div>      
-    <div class="form-row">
-        <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-triggerReleased" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-triggerReleased" style="width:70%;"> Trigger the "released" user intent event</label>
-    </div>    
-    <br>
-    <div class="form-row" style="margin-bottom:0;">
-        <label><i class="fa fa-list"></i> Low level</label>
-    </div>
-    <div class="form-row">
-        <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-buttonChanged" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-buttonChanged" style="width:70%;"> Trigger the "button_changed" internal event</label>
-    </div> 
-    <div class="form-row">
-        <label>&nbsp;</label>    
-        <input type="checkbox" id="node-input-buttonPress" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-buttonPress" style="width:70%;"> Trigger the "button_press" internal event</label>
-    </div> 
-    <div class="form-row">
-        <label>&nbsp;</label>
-        <input type="checkbox" id="node-input-buttonRelease" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-buttonRelease" style="width:70%;"> Trigger the "button_release" internal event</label>
-    </div> 
 </script>
 
 <script type="text/x-red" data-help-name="button-events">
@@ -177,8 +195,9 @@
     The value that will arrive when the button is down (i.e. clicked or pressed).  This can be high when the GPIO input has a pull-up resistor, or low in case of a pull-down resistor.</p>
     <p><strong>Up value:</strong><br/>	
     The value that will arrive when the button is up (i.e. in normal status).  This can be high when the GPIO input has a pull-up resistor, or low in case of a pull-down resistor.</p>
-    <p><strong>User intent:</strong><br/>	
-    Specify which events (that indicate user intent) will be send as an output message:   
+    <p><strong>Events:</strong><br/>	
+    Add all events for which an output needs to be sent (when the event occurs).
+    The first five events indicate user intent:   
         <ul>
             <li><b><i>pressed</i></b>: when a button is pressed and held down. This will be followed with a <code>released</code> event, as soon as the button is released.</li>
             <li><b><i>clicked</i></b>: when a button is pressed and released rapidly.</li>
@@ -186,9 +205,7 @@
             <li><b><i>double_clicked</i></b>: when a click is quickly followed with another click.</li>
             <li><b><i>released</i></b>: when the pressed button is released.</li>
         </ul>
-    </p>
-    <p><strong>Low level:</strong><br/>	
-    Specify which low-level events will be send as an output message:   
+    Beside those, there are some low-level events:   
         <ul>
             <li><b><i>button_changed</i></b>: when a button is pressed or released.</li>
             <li><b><i>button_press</i></b>: when a button is pressed.</li>
