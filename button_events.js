@@ -21,11 +21,10 @@
         var eventType = node.events[outputIndex].type;
         
         node.buttonEvents.on(eventType, function() {
-            var outputMsg = {};
             var outputs = [];
  
             try {
-                RED.util.setMessageProperty(outputMsg, node.outputField, eventType);
+                RED.util.setMessageProperty(node.lastMsg, node.outputField, eventType);
             }
             catch (err) {
                 node.error('Output property msg.' + node.outputField + ' cannot be set.');
@@ -34,7 +33,7 @@
             
             for(var i = 0; i < node.events.length; i++) {
                 if (i === outputIndex) {
-                    outputs.push(outputMsg);
+                    outputs.push(node.lastMsg);
                 }
                 else {
                     outputs.push(null);
@@ -54,6 +53,7 @@
         this.downValue   = config.downValue;
         this.upValue     = config.upValue;
         this.events      = config.events;
+        this.lastMsg     = null;
         
         var node = this;
         
@@ -105,7 +105,14 @@
                 return;
             }
             
-            node.buttonEvents.gpioChange(inputValue)
+            // Analyze the input value
+            var result = node.buttonEvents.gpioChange(inputValue)
+            
+            // Only remember the message when it has been used for the analysis.
+            // For example during the debounce period, the values will be ignored...
+            if (result === "accepted" || result === "final") {
+                node.lastMsg = msg;
+            }
         });
       
         node.on("close",function() { 
