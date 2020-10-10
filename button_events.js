@@ -53,7 +53,7 @@
         this.downValue   = config.downValue;
         this.upValue     = config.upValue;
         this.events      = config.events;
-        this.lastMsg     = null;
+        this.lastMsg     = {};
         
         var node = this;
         
