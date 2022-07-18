@@ -20,8 +20,12 @@ Please buy my wife a coffee to keep her happy, while I am busy developing Node-R
 When the value of a button changes (high or low), this node will determine the kind of even that has happened:
 + A single click
 + A double click
++ A triple click
++ A quadruple click
 + A long press (i.e. keeping the button pressed)
 + A single click followed by a long press
++ A double click followed by a long press
++ A triple click followed by a long press
 
 Physical buttons can be read in many different ways, but a common case for Node-RED is (via an optocoupler) to the GPIO input pin of a Raspberry Pi:
 + Use a pull-up resistor to make sure the (idle) signal is `1`, and the button can pull the signal to `0` (gnd).
@@ -98,6 +102,10 @@ The first 5 events indicate ***user intent*** event types:
 + `clicked`: when a button is pressed and released rapidly.
 + `clicked_pressed`: if a click is quickly followed by pressing and holding the button, then a clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
 + `double_clicked`: if a click is quickly followed with another click, then it is interpreted as a double click.
++ `double_clicked_pressed`: if a double click is quickly followed by pressing and holding the button, then a double_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
++ `triple_clicked`: if 3 clicks quickly follow each other, then it is interpreted as a triple click.
++ `triple_clicked_pressed`: if a triple click is quickly followed by pressing and holding the button, then a triple_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
++ `quadruple_clicked`: if 4 clicks quickly follow each other, then it is interpreted as a quadruple click.
 + `released`: when the pressed button is released.
 
 The last 3 events indicate low-level event types:
