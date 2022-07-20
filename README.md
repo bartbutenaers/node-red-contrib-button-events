@@ -49,23 +49,39 @@ When the button is clicked and released fast (i.e. *released within the "Pressed
 
 ![Single click](https://user-images.githubusercontent.com/14224149/94899160-142b0780-0493-11eb-83c8-fe181b18f9eb.png)
 
-### Long-press timeline
-
-When the button is clicked and kept down some time (i.e. *released after "Pressed" time interval*), then the `released` event will be send:
-
-![Long press](https://user-images.githubusercontent.com/14224149/94899214-33299980-0493-11eb-8f03-5be40ff21472.png)
-
 ### Double-click timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is clicked again immediately afterwards (i.e. *clicked again within the "Clicked" time interval*).  Then the `double-clicked` event will be send:
 
 ![Double click](https://user-images.githubusercontent.com/14224149/94997823-f9998100-05ad-11eb-926f-a10f9b8746fb.png)
 
+### Triple-click timeline
+
+When the button is clicked and released (i.e. released each time within the "Pressed" time interval ), but it is clicked again immediately afterwards two times (i.e. clicked again within the "Clicked" time interval ). Then the `triple-clicked` event will be send.
+
+### Quadruple-click timeline
+
+When the button is clicked and released fast (i.e. released within the "Pressed" time interval ), but it is clicked again immediately afterwards tree times (i.e. clicked again within the "Clicked" time interval ). Then the `quadruple-clicked` event will be send.
+
+### Long-press timeline
+
+When the button is clicked and kept down some time (i.e. *released after "Pressed" time interval*), then the `released` event will be send:
+
+![Long press](https://user-images.githubusercontent.com/14224149/94899214-33299980-0493-11eb-8f03-5be40ff21472.png)
+
 ### Clicked-pressed timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is long clicked immediately afterwards (i.e. *long pressed again within the "Clicked" time interval*).  Then the `clicked-pressed` event will be send:
 
 ![Clicked pressed](https://user-images.githubusercontent.com/14224149/94899382-7f74d980-0493-11eb-9dd1-90be390dda8c.png)
+
+### Double-clicked-pressed timeline
+
+When the button is clicked and released fast two times (i.e. released within the "Pressed" time interval ), but it is long clicked immediately afterwards (i.e. long pressed again within the "Clicked" time interval ). Then the `double_clicked_pressed` event will be send.
+
+### Triple-clicked-pressed timeline
+
+When the button is clicked and released fast three times (i.e. released within the "Pressed" time interval ), but it is long clicked immediately afterwards (i.e. long pressed again within the "Clicked" time interval ). Then the `triple_clicked_pressed` event will be send.
 
 ## Node properties
 
