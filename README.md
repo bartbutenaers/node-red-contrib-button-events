@@ -83,6 +83,20 @@ When the button is clicked and released fast two times (i.e. released within the
 
 When the button is clicked and released fast three times (i.e. released within the "Pressed" time interval ), but it is long clicked immediately afterwards (i.e. long pressed again within the "Clicked" time interval ). Then the `triple_clicked_pressed` event will be send.
 
+## Calibration
+Since it is not always easy to determine normal timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
+
+![image](https://user-images.githubusercontent.com/14224149/181703179-bade85ec-01cf-403e-b444-b17510a7e957.png)
+```
+[{"id":"6ebfda0f85a08768","type":"button-events","z":"6063841c422bab25","name":"","outputs":1,"inputField":"payload","inputFieldType":"msg","outputField":"payload","outputFieldType":"msg","downValue":"0","downValueType":"num","upValue":"1","upValueType":"num","idleValue":"1","clickedInterval":200,"pressedInterval":200,"debounceInterval":30,"events":[{"type":"calibration"}],"x":900,"y":520,"wires":[["06d7b9c99cf0e9cc"]]},{"id":"3fb1bc7ff4d94f8a","type":"inject","z":"6063841c422bab25","name":"start calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"start_calibration","x":660,"y":520,"wires":[["6ebfda0f85a08768"]]},{"id":"d181c5bd13d8ecb8","type":"inject","z":"6063841c422bab25","name":"stop calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"stop_calibration","x":660,"y":640,"wires":[["6ebfda0f85a08768"]]},{"id":"a5b7d28af974a2a3","type":"inject","z":"6063841c422bab25","name":"0","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"num","x":690,"y":560,"wires":[["6ebfda0f85a08768"]]},{"id":"d979a26f00068083","type":"inject","z":"6063841c422bab25","name":"1","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":690,"y":600,"wires":[["6ebfda0f85a08768"]]},{"id":"06d7b9c99cf0e9cc","type":"debug","z":"6063841c422bab25","name":"Calibration output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":1150,"y":520,"wires":[]}]
+```
+Calibration procedure:
+1. Start the calibration by injecting a message with topic *"start_calibration"*.
+2. Repeat the button actions at least 10 times to get a reliable calibration result.
+3. Stop the calibration by injecting a message with topic *"stop_calibration"*.
+4. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
+5. Apply those settings to this node.
+
 ## Node properties
 
 ### Input
