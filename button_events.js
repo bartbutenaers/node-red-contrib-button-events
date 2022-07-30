@@ -51,6 +51,67 @@
         });
     }
     
+    function startCalibrationTimer(node) {
+        // Stop the previous calibration timer, if it is running already
+        if(node.calibrationTimer) {
+            clearTimeout(node.calibrationTimer);
+        }
+
+        // Start a new timer that stops the calibration after 3 minutes, to avoid confusion if people forget to do that
+        node.calibrationTimer = setTimeout(function() {
+            if(node.calibrating) {
+                node.warn("Calibration is stopped automatically after 3 minutes");
+                stopCalibration(node);
+            }
+        }, 3 * 60 * 1000);
+    }
+    
+    function stopCalibration(node) {
+        // Stop the previous calibration timer, if it is running already
+        if(node.calibrationTimer) {
+            clearTimeout(node.calibrationTimer);
+        }
+
+        if(node.calibrating) {
+            if(node.counter < 20){
+                node.warn("Calibration with less than 10 cycles will result in less reliable results...");
+            }
+            
+            var outputMsg = {
+                topic: "calibration_results", 
+                payload: {
+                    "PressedMs": node.maxPressedTimeMs + timeMarginMs ,
+                    "ClickedMs": node.maxReleasedTimeMs + timeMarginMs,
+                    "DebounceMs": debounceTimeMs
+                }
+            }
+            
+            // Create an array with a null for each output
+            var outputs = new Array(node.events.length).fill(null);
+            
+            // Specify that the output message should be send to every calibration output.
+            // Cloning is required, to avoid conflicts in the flow since the same message is send on multiple outputs
+            for(var i = 0; i < node.calibrationOutputs.length; i++) {
+                var calibrationOuput = node.calibrationOutputs[i];
+                outputs[calibrationOuput] = RED.util.cloneMessage(outputMsg);
+            }
+            
+            // Send the calibration output to all the 'calibration' event outputs
+            node.send(outputs);
+            
+            // Reset all calibration variables
+            node.calibrating = false;
+            node.deltaMs = 0;
+            node.pressedEdgeMs = 0;
+            node.releasedEdgeMs = 0;
+            node.maxPressedTimeMs = 0;
+            node.maxReleasedTimeMs = 0;
+            node.counter = 0;
+        }
+                    
+        node.status({ });
+    }
+    
     function ButtonEventsNode(config) {
         RED.nodes.createNode(this, config);
         this.inputField  = config.inputField;
@@ -61,6 +122,7 @@
         this.lastMsg     = {};
         // ANDREAS : NEW NODE VARIABLES (THIS CODE IS CALLED AFTER FLOW STARTUP E.G. AFTER A DEPLOY)
         // PERHAPS ADD 'calibration' before each var name, e.g. calibrationPressedEdgeMs
+        this.calibrationTimer = null;
         this.calibrationOutputs = [];
         this.calibrating = false;
         this.deltaMs = 0;
@@ -115,7 +177,12 @@
                         return;
                     }
                     
+                    startCalibrationTimer(node);
+                    
                     node.calibrating = true;
+                    
+                    node.status({fill:"blue", shape:"ring", text:"calibrating"});
+
                     break;
                 case "stop_calibration":
                     // ANDREAS: YOU COULD SEND AN OUTPUT MESSAGE ON THE SECOND OUTPUT HERE.  SO I SEND THE OUTPUT WHEN msg.topic= stop_calibration is injected
@@ -130,40 +197,7 @@
                         return;
                     }
 
-                    if(node.counter < 20){
-                        node.warn("Calibration with less than 10 cycles will result in less reliable results...");
-                    }
-                    
-                    var outputMsg = {
-                        topic: "calibration_results", 
-                        payload: {
-                            "PressedMs": node.maxPressedTimeMs + timeMarginMs ,
-                            "ClickedMs": node.maxReleasedTimeMs + timeMarginMs,
-                            "DebounceMs": debounceTimeMs
-                        }
-                    }
-                    
-                    // Create an array with a null for each output
-                    var outputs = new Array(node.events.length).fill(null);
-                    
-                    // Specify that the output message should be send to every calibration output.
-                    // Cloning is required, to avoid conflicts in the flow since the same message is send on multiple outputs
-                    for(var i = 0; i < node.calibrationOutputs.length; i++) {
-                        var calibrationOuput = node.calibrationOutputs[i];
-                        outputs[calibrationOuput] = RED.util.cloneMessage(outputMsg);
-                    }
-                    
-                    // Send the calibration output to all the 'calibration' event outputs
-                    node.send(outputs);
-                    
-                    // Reset all calibration variables
-                    node.calibrating = false;
-                    node.deltaMs = 0;
-                    node.pressedEdgeMs = 0;
-                    node.releasedEdgeMs = 0;
-                    node.maxPressedTimeMs = 0;
-                    node.maxReleasedTimeMs = 0;
-                    node.counter = 0;
+                    stopCalibration(node);
 
                     break;
                 default: // All other messages will be considered as button clicks
@@ -194,6 +228,9 @@
                     if (node.calibrating) {
                         // ANDREAS - START HANDLING BUTTON CLICK ANALYSIS DURING CALIBRATION
                         node.counter++; // iterate counter for click-edge countings
+                        
+                        // Restart the calibration timer every time a new value arrives
+                        startCalibrationTimer(node);
 
                         if(inputValue == "1"){
                             /* pressed */
@@ -237,7 +274,7 @@
         node.on("close",function() { 
             node.buttonEvents.cleanup();
             
-            node.status({ });
+            stopCalibration(node);
         });
     }
     RED.nodes.registerType("button-events",ButtonEventsNode);
