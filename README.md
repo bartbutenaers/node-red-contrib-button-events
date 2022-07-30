@@ -17,6 +17,8 @@ Please buy my wife a coffee to keep her happy, while I am busy developing Node-R
 
 ## Node Usage
 
+***REMARK: the easiest way to get started is by doing a calibration (see "Calibration" section below) to determine the timing values automatically, before you start using this node!***
+
 When the value of a button changes (high or low), this node will determine the kind of even that has happened:
 + A single click
 + A double click
@@ -95,7 +97,9 @@ Calibration procedure:
 2. Repeat the button actions at least 10 times to get a reliable calibration result.
 3. Stop the calibration by injecting a message with topic *"stop_calibration"*.
 4. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
-5. Apply those settings to this node.
+5. Apply those settings to this node by copying the calibration results into the config screen of this node:
+
+   ![calibration result](https://user-images.githubusercontent.com/14224149/181877422-896b64e4-a2f6-4c7e-94ea-81bf21861eb7.png)
 
 Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
 
