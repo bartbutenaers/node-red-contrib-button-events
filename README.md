@@ -1,7 +1,9 @@
 # node-red-contrib-button-events
 A Node-RED node to send events based on button actions.
 
-I would really like to thank [Bryan Nielsen](https://github.com/bnielsen1965) for the tremendous support when integrating his [button-events](https://github.com/bnielsen1965/button-events) library into Node-RED!
+I would really like to thank:
++ [Bryan Nielsen](https://github.com/bnielsen1965) for the tremendous support when integrating his [button-events](https://github.com/bnielsen1965/button-events) library into Node-RED!
++ [Andreas Lindegger](https://github.com/tsknightstorm) for support of triple and quadruple clicks, and providing me the calculations of the calibration feature.
 
 ## Install
 Run the following npm command in your Node-RED user directory (typically ~/.node-red):
