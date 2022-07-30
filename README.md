@@ -97,7 +97,7 @@ Calibration procedure:
 4. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
 5. Apply those settings to this node.
 
-Note that after 3 minutes the calibration will automatically stop, to avoid confusing when the calibration wouldn't be stopped explicit!
+Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
 
 ## Node properties
 
