@@ -8,6 +8,11 @@
     "author": {
         "name": "Bart Butenaers"
     },
+    "contributors": [
+        {
+            "name": "Andreas Lindegger"
+        }
+    ],
     "license": "Apache-2.0",
     "keywords": [
         "node-red",
