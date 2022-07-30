@@ -87,6 +87,7 @@
                     $('<option />', {value: "button_changed", text: "button_changed"}).appendTo(eventTypeField);
                     $('<option />', {value: "button_press", text: "button_press"}).appendTo(eventTypeField);
                     $('<option />', {value: "button_release", text: "button_release"}).appendTo(eventTypeField);
+                    $('<option />', {value: "calibration", text: "calibration"}).appendTo(eventTypeField);
                     eventTypeField.val(event.type || "clicked");
 
                     var index = $("#node-input-events-container").editableList('items').length;
@@ -220,5 +221,6 @@
             <li><b><i>button_press</i></b>: when a button is pressed.</li>
             <li><b><i>button_release</i></b>: when a button is released.</li>
         </ul>
-    Note that the user intent events are sufficient in most cases, and that the low-level events are only required in special circumstances!</p>    
+    Note that the user intent events are sufficient in most cases, and that the low-level events are only required in special circumstances!
+    There is also an extra <b><i>calibration</i></b> event, that is only used when calibration is active.</p>    
 </script>

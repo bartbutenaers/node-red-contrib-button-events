@@ -19,6 +19,9 @@ Please buy my wife a coffee to keep her happy, while I am busy developing Node-R
 
 ## Node Usage
 
+***REMARK: the easiest way to get started is by doing a calibration (see "Calibration" section below) to determine the timing values automatically, before you start using this node!***
+
+
 When the value of a button changes (high or low), this node will determine the kind of even that has happened:
 + A single click
 + A double click
@@ -53,41 +56,78 @@ The following timelines show how the button input is watched in the specified ti
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), then the `clicked` event will be send:
 
-![Single click](https://user-images.githubusercontent.com/14224149/94899160-142b0780-0493-11eb-83c8-fe181b18f9eb.png)
+![Single click](https://user-images.githubusercontent.com/16190614/181903686-f99bc1fa-f3fc-426b-875e-30f6b621b8d5.png)
+
 
 ### Double-click timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is clicked again immediately afterwards (i.e. *clicked again within the "Clicked" time interval*).  Then the `double-clicked` event will be send:
 
-![Double click](https://user-images.githubusercontent.com/14224149/94997823-f9998100-05ad-11eb-926f-a10f9b8746fb.png)
+![Double click](https://user-images.githubusercontent.com/16190614/181903730-76095052-81e7-4996-9f2e-662a9c77fa5e.png)
+
 
 ### Triple-click timeline
 
 When the button is clicked and released (i.e. released each time within the "Pressed" time interval ), but it is clicked again immediately afterwards two times (i.e. clicked again within the "Clicked" time interval ). Then the `triple-clicked` event will be send.
 
+![Triple_click](https://user-images.githubusercontent.com/16190614/181903951-26822dd0-f577-46be-8f2a-a59299a755ee.png)
+
 ### Quadruple-click timeline
 
 When the button is clicked and released fast (i.e. released within the "Pressed" time interval ), but it is clicked again immediately afterwards tree times (i.e. clicked again within the "Clicked" time interval ). Then the `quadruple-clicked` event will be send.
+
+![Quadruple_click](https://user-images.githubusercontent.com/16190614/181903917-897744e2-0cd2-4b5c-bdab-4eb031191b97.png)
 
 ### Long-press timeline
 
 When the button is clicked and kept down some time (i.e. *released after "Pressed" time interval*), then the `released` event will be send:
 
-![Long press](https://user-images.githubusercontent.com/14224149/94899214-33299980-0493-11eb-8f03-5be40ff21472.png)
+![Long press](https://user-images.githubusercontent.com/16190614/181903776-fcbec6dd-ce37-470c-9928-b4261862dfa8.png)
+
 
 ### Clicked-pressed timeline
 
 When the button is clicked and released fast (i.e. *released within the "Pressed" time interval*), but it is long clicked immediately afterwards (i.e. *long pressed again within the "Clicked" time interval*).  Then the `clicked-pressed` event will be send:
 
-![Clicked pressed](https://user-images.githubusercontent.com/14224149/94899382-7f74d980-0493-11eb-9dd1-90be390dda8c.png)
+![Clicked pressed](https://user-images.githubusercontent.com/16190614/181903794-6c928b13-7ace-4c5a-a549-56436b462980.png)
+
 
 ### Double-clicked-pressed timeline
 
 When the button is clicked and released fast two times (i.e. released within the "Pressed" time interval ), but it is long clicked immediately afterwards (i.e. long pressed again within the "Clicked" time interval ). Then the `double_clicked_pressed` event will be send.
 
+![Double_clicked_pressed](https://user-images.githubusercontent.com/16190614/181903868-3608b5f9-9ce4-4783-8d48-85b1639f605d.png)
+
+
 ### Triple-clicked-pressed timeline
 
 When the button is clicked and released fast three times (i.e. released within the "Pressed" time interval ), but it is long clicked immediately afterwards (i.e. long pressed again within the "Clicked" time interval ). Then the `triple_clicked_pressed` event will be send.
+
+![Triple_clicked_pressed](https://user-images.githubusercontent.com/16190614/181903839-5fb84523-0ae8-4768-986c-a00f703607c9.png)
+
+### Background Information
+For a deeper understanding of the click mechanism the folowing finit-state machine diagram shows the logic behind.
+
+![button-events-FSM drawio](https://user-images.githubusercontent.com/16190614/181904017-51b82264-0ebe-4d90-8244-c277dd223b84.png)
+
+
+## Calibration
+Since it is not always easy to determine normal timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
+
+![calibration](https://user-images.githubusercontent.com/14224149/181703179-bade85ec-01cf-403e-b444-b17510a7e957.png)
+```
+[{"id":"6ebfda0f85a08768","type":"button-events","z":"6063841c422bab25","name":"","outputs":1,"inputField":"payload","inputFieldType":"msg","outputField":"payload","outputFieldType":"msg","downValue":"0","downValueType":"num","upValue":"1","upValueType":"num","idleValue":"1","clickedInterval":200,"pressedInterval":200,"debounceInterval":30,"events":[{"type":"calibration"}],"x":900,"y":520,"wires":[["06d7b9c99cf0e9cc"]]},{"id":"3fb1bc7ff4d94f8a","type":"inject","z":"6063841c422bab25","name":"start calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"start_calibration","x":660,"y":520,"wires":[["6ebfda0f85a08768"]]},{"id":"d181c5bd13d8ecb8","type":"inject","z":"6063841c422bab25","name":"stop calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"stop_calibration","x":660,"y":640,"wires":[["6ebfda0f85a08768"]]},{"id":"a5b7d28af974a2a3","type":"inject","z":"6063841c422bab25","name":"0","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"num","x":690,"y":560,"wires":[["6ebfda0f85a08768"]]},{"id":"d979a26f00068083","type":"inject","z":"6063841c422bab25","name":"1","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":690,"y":600,"wires":[["6ebfda0f85a08768"]]},{"id":"06d7b9c99cf0e9cc","type":"debug","z":"6063841c422bab25","name":"Calibration output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":1150,"y":520,"wires":[]}]
+```
+Calibration procedure:
+1. Start the calibration for 3 minutes by injecting a message with topic *"start_calibration"*.
+2. Repeat the button actions at least 10 times to get a reliable calibration result.
+3. Stop the calibration by injecting a message with topic *"stop_calibration"*.
+4. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
+5. Apply those settings to this node by copying the calibration results into the config screen of this node:
+
+   ![calibration result](https://user-images.githubusercontent.com/14224149/181877422-896b64e4-a2f6-4c7e-94ea-81bf21861eb7.png)
+
+Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
 
 ## Node properties
 
@@ -116,14 +156,14 @@ Specifies the value that will arrive when the button is up (i.e. in normal statu
 Add all events in the list, for which an output needs to be sent (when the event occurs).
 The first 5 events indicate ***user intent*** event types:
 
++ `clicked`: when a button is pressed and released rapidly one time.
++ `double_clicked`: when a button is pressed and released rapidly two times.
++ `triple_clicked`: when a button is pressed and released rapidly tree times.
++ `quadruple_clicked`: when a button is pressed and released rapidly four times.
 + `pressed`: when a button is pressed and held down. This will be followed with a `released` event, as soon as the button is released.
-+ `clicked`: when a button is pressed and released rapidly.
 + `clicked_pressed`: if a click is quickly followed by pressing and holding the button, then a clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
-+ `double_clicked`: if a click is quickly followed with another click, then it is interpreted as a double click.
 + `double_clicked_pressed`: if a double click is quickly followed by pressing and holding the button, then a double_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
-+ `triple_clicked`: if 3 clicks quickly follow each other, then it is interpreted as a triple click.
 + `triple_clicked_pressed`: if a triple click is quickly followed by pressing and holding the button, then a triple_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
-+ `quadruple_clicked`: if 4 clicks quickly follow each other, then it is interpreted as a quadruple click.
 + `released`: when the pressed button is released.
 
 The last 3 events indicate low-level event types:
