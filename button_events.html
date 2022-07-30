@@ -79,13 +79,17 @@
                     $('<option />', {value: "pressed", text: "pressed"}).appendTo(eventTypeField);
                     $('<option />', {value: "clicked_pressed", text: "clicked_pressed"}).appendTo(eventTypeField);
                     $('<option />', {value: "double_clicked", text: "double_clicked"}).appendTo(eventTypeField);
+                    $('<option />', {value: "double_clicked_pressed", text: "double_clicked_pressed"}).appendTo(eventTypeField);
+                    $('<option />', {value: "triple_clicked", text: "triple_clicked"}).appendTo(eventTypeField);
+                    $('<option />', {value: "triple_clicked_pressed", text: "triple_clicked_pressed"}).appendTo(eventTypeField);
+                    $('<option />', {value: "quadruple_clicked", text: "quadruple_clicked"}).appendTo(eventTypeField);
                     $('<option />', {value: "released", text: "released"}).appendTo(eventTypeField);
                     $('<option />', {value: "button_changed", text: "button_changed"}).appendTo(eventTypeField);
                     $('<option />', {value: "button_press", text: "button_press"}).appendTo(eventTypeField);
                     $('<option />', {value: "button_release", text: "button_release"}).appendTo(eventTypeField);
                     $('<option />', {value: "calibration", text: "calibration"}).appendTo(eventTypeField);
                     eventTypeField.val(event.type || "clicked");
-        
+
                     var index = $("#node-input-events-container").editableList('items').length;
                     var outputIndexField = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
                     outputIndexField.append(' &#8594; <span class="node-input-event-index">' + index + '</span> ');
@@ -205,6 +209,10 @@
             <li><b><i>clicked</i></b>: when a button is pressed and released rapidly.</li>
             <li><b><i>clicked_pressed</i></b>: when a click is quickly followed by pressing and holding the button.  This will be followed by a <code>released</code> event, as soon as the button is released.</li>
             <li><b><i>double_clicked</i></b>: when a click is quickly followed with another click.</li>
+            <li><b><i>double_clicked_pressed</i></b>: when a double click is quickly followed by pressing and holding the button.  This will be followed by a <code>released</code> event, as soon as the button is released.</li>
+            <li><b><i>triple_clicked</i></b>: when 3 clicks quickly follow each other.</li>
+            <li><b><i>triple_clicked_pressed</i></b>: when a triple click is quickly followed by pressing and holding the button.  This will be followed by a <code>released</code> event, as soon as the button is released.</li>
+            <li><b><i>quadruple_clicked</i></b>: when 4 clicks quickly follow each other.</li>
             <li><b><i>released</i></b>: when the pressed button is released.</li>
         </ul>
     Beside those, there are some low-level events:   

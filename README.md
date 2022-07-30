@@ -1,7 +1,9 @@
 # node-red-contrib-button-events
 A Node-RED node to send events based on button actions.
 
-I would really like to thank [Bryan Nielsen](https://github.com/bnielsen1965) for the tremendous support when integrating his [button-events](https://github.com/bnielsen1965/button-events) library into Node-RED!
+I would really like to thank:
++ [Bryan Nielsen](https://github.com/bnielsen1965) for the tremendous support when integrating his [button-events](https://github.com/bnielsen1965/button-events) library into Node-RED!
++ [Andreas Lindegger](https://github.com/tsknightstorm) for support of triple and quadruple clicks, and providing me the calculations of the calibration feature.
 
 ## Install
 Run the following npm command in your Node-RED user directory (typically ~/.node-red):
@@ -160,8 +162,8 @@ The first 5 events indicate ***user intent*** event types:
 + `quadruple_clicked`: when a button is pressed and released rapidly four times.
 + `pressed`: when a button is pressed and held down. This will be followed with a `released` event, as soon as the button is released.
 + `clicked_pressed`: if a click is quickly followed by pressing and holding the button, then a clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
-+ `double_clicked_pressed`: if a double_click is quickly followed by pressing and holding the button, then a double_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
-+ `triple_clicked_pressed`: if a triple_click is quickly followed by pressing and holding the button, then a triple_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
++ `double_clicked_pressed`: if a double click is quickly followed by pressing and holding the button, then a double_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
++ `triple_clicked_pressed`: if a triple click is quickly followed by pressing and holding the button, then a triple_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
 + `released`: when the pressed button is released.
 
 The last 3 events indicate low-level event types:
