@@ -48,6 +48,8 @@ When a button value  arrives in the specified input message field, then this nod
 ```
 The detected event name will also be displayed in the status of the node.
 
+REMARK: that you need to specify (in the config screen) for every required event, on which output it needs to be sent!  So by default this node won't have any outputs.
+
 ## Timelines
 
 The following timelines show how the button input is watched in the specified time intervals, and when which events are send in the output message.  The low-level events (which normally won't be used) are shown in blue, while the important user intent events are shown in red.
