@@ -18,7 +18,8 @@
     const ButtonEvents = require('button-events');
     
     // ANDREAS CONSTANTS
-    const timeMarginMs = 100;
+    const timeMarginMsClicked = 100;
+    const timeMarginMsPressed = 250;
     const debounceTimeMs = 15;     // http://www.ganssle.com/debouncing.htm -> exceeds 15ms in very extreme cases, normaly well below 1ms. Means if one does not know it better 15ms should be very save.
     const limitDeltaTimeMs = 1500; // to filte first and last edges or very long breaks of clicking
  
@@ -80,8 +81,8 @@
             var outputMsg = {
                 topic: "calibration_results", 
                 payload: {
-                    "PressedMs": node.maxPressedTimeMs + timeMarginMs ,
-                    "ClickedMs": node.maxReleasedTimeMs + timeMarginMs,
+                    "ClickedMs": node.maxReleasedTimeMs + timeMarginMsClicked,
+                    "PressedMs": node.maxPressedTimeMs + timeMarginMsPressed ,
                     "DebounceMs": debounceTimeMs
                 }
             }
