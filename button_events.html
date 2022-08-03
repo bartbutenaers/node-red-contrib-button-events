@@ -27,9 +27,10 @@
             upValue: {value: "1", required: true, validate: RED.validators.typedInput("upValueType")},
             upValueType: {value: "num"},
             idleValue : {value: "1"},
-            clickedInterval: {value: 500},
-            pressedInterval: {value: 750},
-            debounceInterval: {value: 15},
+            buttonEventsConfig: {value:"", type: "button-events-config"},
+            clickedInterval: {value: 500}, // Obsolete (only used for pre v2.0.0 nodes without config node)
+            pressedInterval: {value: 750}, // Obsolete (only used for pre v2.0.0 nodes without config node)
+            debounceInterval: {value: 15}, // Obsolete (only used for pre v2.0.0 nodes withouth config node)
             events: {value: []}
         },        
         inputs:1,
@@ -45,6 +46,24 @@
         },
         oneditprepare: function() {
             var node = this;
+            debugger;
+            if(!node.buttonEventsConfig) {
+                node.buttonEventsConfig = {
+                    id: RED.nodes.id(),
+                    _def: RED.nodes.getType("button-events-config"),
+                    type: "button-events-config",
+                    hasUsers: false, 
+                    users: [],
+                    name: "config for " + node.id,
+                    label: function() { return this.name || "button events config"}
+                }
+                
+                node.buttonEventsConfig.clickedInterval  = node.clickedInterval;
+                node.buttonEventsConfig.pressedInterval  = node.pressedInterval;
+                node.buttonEventsConfig.debounceInterval = node.debounceInterval;
+
+                RED.nodes.add(node.buttonEventsConfig);
+            }
 
             $('#node-input-inputField').typedInput({
                 typeField: $("#node-input-inputFieldType"),
@@ -144,6 +163,11 @@
     </div>
     <br>
     <div class="form-row">
+        <label for="node-input-buttonEventsConfig"><i class="fa fa-clock-o"></i> Timings</label>
+        <!-- Node-Red will replace this input element by a drop-down (with available button events configurations) -->
+        <input type="text" id="node-input-buttonEventsConfig">
+    </div>
+    <div class="form-row">
         <label style="padding-top: 8px" for="node-input-inputField"><i class="fa fa-sign-in"></i> Input</label>
         <input type="text" id="node-input-inputField" style="width:70%">
         <input type="hidden" id="node-input-inputFieldType">
@@ -152,18 +176,6 @@
         <label style="padding-top: 8px" for="node-input-outputField"><i class="fa fa-sign-in"></i> Output</label>
         <input type="text" id="node-input-outputField" style="width:70%">
         <input type="hidden" id="node-input-outputFieldType">
-    </div>
-    <div class="form-row">
-        <label for="node-input-clickedInterval"><i class="fa fa-table"></i> Clicked [ms]</span></label>
-        <input type="number" id="node-input-clickedInterval">
-    </div>
-    <div class="form-row">
-        <label for="node-input-pressedInterval"><i class="fa fa-table"></i> Pressed [ms]</span></label>
-        <input type="number" id="node-input-pressedInterval">
-    </div>
-    <div class="form-row">
-        <label for="node-input-debounceInterval"><i class="fa fa-table"></i> Debounce [ms]</span></label>
-        <input type="number" id="node-input-debounceInterval">
     </div>
     <div class="form-row">
         <label style="padding-top: 8px" for="node-input-downValue"><i class="fa fa-hand-o-down"></i> Down value</label>
@@ -191,12 +203,6 @@
     The input message field where the button value (the low or high value) will arrive.</p>
     <p><strong>Output:</strong><br/>	
     The output message field where the detected event type will be stored.</p>
-    <p><strong>Clicked:</strong><br/>	
-    The interval (in milliseconds) to wait - after a button is released - before generating a <code>clicked</code> event.  When a second click arrives within the "Clicked" interval, then both clicks will be combined to a <code>double-click</code> event.</p>
-    <p><strong>Pressed:</strong><br/>	
-    The interval (in milliseconds) to wait - after a button is pressed - before generating a <code>pressed</code> event. When the button is not being released within this interval, the button is kept down (e.g. for dimming a light).</p>
-    <p><strong>Debounce:</strong><br/>	
-    The interval (in milliseconds) to wait before considering the input signal to have stabilized.  Within this time interval, all new input messages that arrive will be ignored.</p>
     <p><strong>Down value:</strong><br/>	
     The value that will arrive when the button is down (i.e. clicked or pressed).  This can be high when the GPIO input has a pull-up resistor, or low in case of a pull-down resistor.</p>
     <p><strong>Up value:</strong><br/>	
