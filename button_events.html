@@ -28,9 +28,9 @@
             upValueType: {value: "num"},
             idleValue : {value: "1"},
             buttonEventsConfig: {value:"", type: "button-events-config"},
-            clickedInterval: {value: 500}, // Obsolete (only used for pre v2.0.0 nodes without config node)
-            pressedInterval: {value: 750}, // Obsolete (only used for pre v2.0.0 nodes without config node)
-            debounceInterval: {value: 15}, // Obsolete (only used for pre v2.0.0 nodes withouth config node)
+            clickedInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes without config node)
+            pressedInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes without config node)
+            debounceInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes withouth config node)
             events: {value: []}
         },        
         inputs:1,
@@ -47,14 +47,19 @@
         oneditprepare: function() {
             var node = this;
             debugger;
-            if(!node.buttonEventsConfig) {
+            // Migration of old nodes (pre v2.0.0): when no config node is available but the old properties are available            
+            // Dynamically create a new config node, select it and copy the old properties to it.
+            if(!node.buttonEventsConfig && node.clickedInterval && node.pressedInterval && node.debounceInterval) {
+                var configNodeId = RED.nodes.id();
+                var configNodeName = "config for " + node.id;
+                
                 node.buttonEventsConfig = {
-                    id: RED.nodes.id(),
+                    id: configNodeId,
                     _def: RED.nodes.getType("button-events-config"),
                     type: "button-events-config",
                     hasUsers: false, 
                     users: [],
-                    name: "config for " + node.id,
+                    name: configNodeName,
                     label: function() { return this.name || "button events config"}
                 }
                 
@@ -63,6 +68,12 @@
                 node.buttonEventsConfig.debounceInterval = node.debounceInterval;
 
                 RED.nodes.add(node.buttonEventsConfig);
+                
+                $("#node-input-buttonEventsConfig").append($('<option>', {
+                    value: configNodeId,
+                    text: configNodeName,
+                    selected: "selected"
+                }));
             }
 
             $('#node-input-inputField').typedInput({
