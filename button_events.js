@@ -132,16 +132,30 @@
         this.maxPressedTimeMs = 0;
         this.maxReleasedTimeMs = 0;
         this.counter = 0;
-        
+
         var node = this;
+        
+        // Retrieve the config node, where the timings are configured
+        var buttonEventsConfig = RED.nodes.getNode(config.buttonEventsConfig);
+        
+        if (buttonEventsConfig) {
+            node.debounceInterval = buttonEventsConfig.debounceInterval;
+			node.pressedInterval  = buttonEventsConfig.pressedInterval;
+			node.clickedInterval  = buttonEventsConfig.clickedInterval;
+        }
+        else {
+            node.debounceInterval = config.debounceInterval;
+			node.pressedInterval  = config.pressedInterval;
+			node.clickedInterval  = config.clickedInterval;            
+        }
         
         // We act like there is no pull-up resister (in case of a GPIO input): see below for more info...
         const settings = {
 		  usePullUp: false,
 		  timing: {
-			debounce: config.debounceInterval,
-			pressed: config.pressedInterval,
-			clicked: config.clickedInterval
+			debounce: node.debounceInterval,
+			pressed:  node.pressedInterval,
+			clicked:  node.clickedInterval
 		  }
 		};
 

@@ -37,7 +37,8 @@
     },
     "node-red": {
         "nodes": {
-            "button-events": "button_events.js"
+            "button-events": "button_events.js",
+            "button-events-config": "button_events_config.js"
         }
     }
 }
