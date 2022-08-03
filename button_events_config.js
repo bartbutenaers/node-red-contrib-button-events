@@ -28,5 +28,5 @@
 		});
     }
     
-    RED.nodes.registerType("button-events-config",ButtonEventsConfigNode});
+    RED.nodes.registerType("button-events-config",ButtonEventsConfigNode);
 }
