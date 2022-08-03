@@ -67,6 +67,10 @@
                 node.buttonEventsConfig.pressedInterval  = node.pressedInterval;
                 node.buttonEventsConfig.debounceInterval = node.debounceInterval;
 
+                node.clickedInterval  = null;
+                node.pressedInterval  = null;
+                node.debounceInterval = null;
+
                 RED.nodes.add(node.buttonEventsConfig);
                 
                 $("#node-input-buttonEventsConfig").append($('<option>', {
