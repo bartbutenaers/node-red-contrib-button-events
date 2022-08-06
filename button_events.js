@@ -17,7 +17,6 @@
     var settings = RED.settings;
     const ButtonEvents = require('button-events');
     
-    // ANDREAS CONSTANTS
     const timeMarginMsClicked = 100;
     const timeMarginMsPressed = 250;
     const debounceTimeMs = 15;     // http://www.ganssle.com/debouncing.htm -> exceeds 15ms in very extreme cases, normaly well below 1ms. Means if one does not know it better 15ms should be very save.
@@ -121,8 +120,6 @@
         this.upValue     = config.upValue;
         this.events      = config.events;
         this.lastMsg     = {};
-        // ANDREAS : NEW NODE VARIABLES (THIS CODE IS CALLED AFTER FLOW STARTUP E.G. AFTER A DEPLOY)
-        // PERHAPS ADD 'calibration' before each var name, e.g. calibrationPressedEdgeMs
         this.calibrationTimer = null;
         this.calibrationOutputs = [];
         this.calibrating = false;
@@ -181,7 +178,6 @@
             
             switch(msg.topic) {
                 case "start_calibration":
-                    // ANDREAS: YOU CAN RESET YOUR VARIABLES HERE
                     if(node.calibrationOutputs.length === 0) {
                         node.warn("No calibration output has been specified in the node's config screen");
                         return;
@@ -200,8 +196,6 @@
 
                     break;
                 case "stop_calibration":
-                    // ANDREAS: YOU COULD SEND AN OUTPUT MESSAGE ON THE SECOND OUTPUT HERE.  SO I SEND THE OUTPUT WHEN msg.topic= stop_calibration is injected
-                    // instead of after counter>=20.  AND THEN WE ADD ON THE README PAGE THAT YOU SHOULD DO AT LEAST 10 ITERATIONS TO HAVE A RELIABLE RESULT.  IS THAT OK?
                     if(node.calibrationOutputs.length === 0) {
                         node.warn("No calibration output has been specified in the node's config screen");
                         return;
@@ -241,7 +235,6 @@
                     }
 
                     if (node.calibrating) {
-                        // ANDREAS - START HANDLING BUTTON CLICK ANALYSIS DURING CALIBRATION
                         node.counter++; // iterate counter for click-edge countings
                         
                         // Restart the calibration timer every time a new value arrives
