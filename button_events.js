@@ -58,10 +58,10 @@
             clearTimeout(node.calibrationTimer);
         }
 
-        // Start a new timer that stops the calibration after 3 minutes, to avoid confusion if people forget to do that
+        // Start a new timer that stops the calibration after 3 minutes of inactivity, to avoid confusion if people forget to turn it off
         node.calibrationTimer = setTimeout(function() {
             if(node.calibrating) {
-                node.warn("Calibration is stopped automatically after 3 minutes");
+                node.warn("Calibration is stopped automatically after 3 minutes of inactivity");
                 stopCalibration(node);
             }
         }, 3 * 60 * 1000);
