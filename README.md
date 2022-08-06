@@ -71,7 +71,7 @@ Since it is not always easy to determine timing settings, this node offers a cal
    ![calibration result](https://user-images.githubusercontent.com/16190614/183250927-90e3681e-b8e1-446c-8a26-361ed8c8b137.jpg)
 
 
-Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
+Note that ***after 3 minutes of inactivity*** (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
 
 ## Timelines
 
