@@ -189,6 +189,8 @@
                     }
                     
                     startCalibrationTimer(node);
+			    
+                    node.warn("Calibration is started");
                     
                     node.calibrating = true;
                     
