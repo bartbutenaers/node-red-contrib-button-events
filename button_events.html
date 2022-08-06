@@ -27,7 +27,10 @@
             upValue: {value: "1", required: true, validate: RED.validators.typedInput("upValueType")},
             upValueType: {value: "num"},
             idleValue : {value: "1"},
-            buttonEventsConfig: {value:"", type: "button-events-config"},
+            buttonEventsConfig: {value:"", type: "button-events-config", validate:function(v) {
+                // There should be a config node, except when the 3 old (pre v2.0.0) timing property values are still inside this node
+                return (v!=null && v!="")|| (this.clickedInterval!=null && this.pressedInterval!=null && this.debounceInterval!=null);
+            }},
             clickedInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes without config node)
             pressedInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes without config node)
             debounceInterval: {value: null}, // Obsolete (only used for pre v2.0.0 nodes withouth config node)
