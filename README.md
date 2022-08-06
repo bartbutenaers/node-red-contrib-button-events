@@ -50,6 +50,29 @@ The detected event name will also be displayed in the status of the node.
 
 REMARK: that you need to specify (in the config screen) for every required event, on which output it needs to be sent!  So by default this node won't have any outputs.
 
+## Calibration
+Since it is not always easy to determine timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
+
+
+### Calibration procedure:
+1. Import the folowing flow
+
+![calibration](https://user-images.githubusercontent.com/14224149/181703179-bade85ec-01cf-403e-b444-b17510a7e957.png)
+```
+[{"id":"6ebfda0f85a08768","type":"button-events","z":"6063841c422bab25","name":"","outputs":1,"inputField":"payload","inputFieldType":"msg","outputField":"payload","outputFieldType":"msg","downValue":"0","downValueType":"num","upValue":"1","upValueType":"num","idleValue":"1","clickedInterval":200,"pressedInterval":200,"debounceInterval":30,"events":[{"type":"calibration"}],"x":900,"y":520,"wires":[["06d7b9c99cf0e9cc"]]},{"id":"3fb1bc7ff4d94f8a","type":"inject","z":"6063841c422bab25","name":"start calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"start_calibration","x":660,"y":520,"wires":[["6ebfda0f85a08768"]]},{"id":"d181c5bd13d8ecb8","type":"inject","z":"6063841c422bab25","name":"stop calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"stop_calibration","x":660,"y":640,"wires":[["6ebfda0f85a08768"]]},{"id":"a5b7d28af974a2a3","type":"inject","z":"6063841c422bab25","name":"0","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"num","x":690,"y":560,"wires":[["6ebfda0f85a08768"]]},{"id":"d979a26f00068083","type":"inject","z":"6063841c422bab25","name":"1","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":690,"y":600,"wires":[["6ebfda0f85a08768"]]},{"id":"06d7b9c99cf0e9cc","type":"debug","z":"6063841c422bab25","name":"Calibration output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":1150,"y":520,"wires":[]}]
+```
+
+3. Start the calibration for 3 minutes by injecting a message with topic *"start_calibration"*.
+4. Repeat the button actions at least 10 times to get a reliable calibration result. Do this in the slowest speed you would like to detec multiclicks. Perform "thentime_click" action.
+5. Stop the calibration by injecting a message with topic *"stop_calibration"*.
+6. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
+7. Apply those settings to this node by copying the calibration results into the config screen of this node:
+
+   ![calibration result](https://user-images.githubusercontent.com/16190614/183250927-90e3681e-b8e1-446c-8a26-361ed8c8b137.jpg)
+
+
+Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
+
 ## Timelines
 
 The following timelines show how the button input is watched in the specified time intervals, and when which events are send in the output message.  The low-level events (which normally won't be used) are shown in blue, while the important user intent events are shown in red.
@@ -113,40 +136,16 @@ For a deeper understanding of the click mechanism the folowing finit-state machi
 ![button-events-FSM drawio](https://user-images.githubusercontent.com/16190614/181904017-51b82264-0ebe-4d90-8244-c277dd223b84.png)
 
 
-## Calibration
-Since it is not always easy to determine normal timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
-
-![calibration](https://user-images.githubusercontent.com/14224149/181703179-bade85ec-01cf-403e-b444-b17510a7e957.png)
-```
-[{"id":"6ebfda0f85a08768","type":"button-events","z":"6063841c422bab25","name":"","outputs":1,"inputField":"payload","inputFieldType":"msg","outputField":"payload","outputFieldType":"msg","downValue":"0","downValueType":"num","upValue":"1","upValueType":"num","idleValue":"1","clickedInterval":200,"pressedInterval":200,"debounceInterval":30,"events":[{"type":"calibration"}],"x":900,"y":520,"wires":[["06d7b9c99cf0e9cc"]]},{"id":"3fb1bc7ff4d94f8a","type":"inject","z":"6063841c422bab25","name":"start calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"start_calibration","x":660,"y":520,"wires":[["6ebfda0f85a08768"]]},{"id":"d181c5bd13d8ecb8","type":"inject","z":"6063841c422bab25","name":"stop calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"stop_calibration","x":660,"y":640,"wires":[["6ebfda0f85a08768"]]},{"id":"a5b7d28af974a2a3","type":"inject","z":"6063841c422bab25","name":"0","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"num","x":690,"y":560,"wires":[["6ebfda0f85a08768"]]},{"id":"d979a26f00068083","type":"inject","z":"6063841c422bab25","name":"1","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":690,"y":600,"wires":[["6ebfda0f85a08768"]]},{"id":"06d7b9c99cf0e9cc","type":"debug","z":"6063841c422bab25","name":"Calibration output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":1150,"y":520,"wires":[]}]
-```
-Calibration procedure:
-1. Start the calibration for 3 minutes by injecting a message with topic *"start_calibration"*.
-2. Repeat the button actions at least 10 times to get a reliable calibration result.
-3. Stop the calibration by injecting a message with topic *"stop_calibration"*.
-4. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
-5. Apply those settings to this node by copying the calibration results into the config screen of this node:
-
-   ![calibration result](https://user-images.githubusercontent.com/14224149/181877422-896b64e4-a2f6-4c7e-94ea-81bf21861eb7.png)
-
-Note that after 3 minutes of inactivity (i.e. no button clicks), the calibration will automatically stop.  This is required to avoid confusing when the calibration wouldn't be stopped explicit!
-
 ## Node properties
+
+### Timings
+Defines the timings of the click detections in a configuration node. The same configuration node can be used over several "button-events" nodes to have the same behaver all over again.
 
 ### Input
 Specifies the input message field where the input value (`0` or `1`) will arrive.
 
 ### Output
 Specifies the output message field where the detected event type will be stored.  When the *Output* field differs from the *Input* field, the original input message data will be kept intact and the message will be extended with the event type.
-
-### Clicked
-Specifies the interval (in milliseconds) to wait - after a button is released - before generating a `clicked` event.  When a second click arrives within the *"Clicked"* interval, then both clicks will be combined to a `double-click` event.
-
-### Pressed
-Specifies the interval (in milliseconds) to wait - after a button is pressed - before generating a `pressed` event.  When the button is not being released within this interval, the button is kept down, e.g. for dimming a light.
-
-### Debounce
-Specifies the interval (in milliseconds) to wait before considering the input signal to have stabilized.  Within this time interval, all new input messages that arrive will be ignored.
 
 ### Down value
 Specifies the value that will arrive when the button is down (i.e. clicked or pressed).   For example for a GPIO input with a pull-up resistor this will be `0`, or `1` in case of a pull-down resistor.
@@ -168,10 +167,27 @@ The first 5 events indicate ***user intent*** event types:
 + `triple_clicked_pressed`: if a triple click is quickly followed by pressing and holding the button, then a triple_clicked_pressed event will be emitted. This will be followed by a `released` event, as soon as the button is released.
 + `released`: when the pressed button is released.
 
-The last 3 events indicate low-level event types:
+The next 3 events indicate ***low-level*** event types:
 
 + `button_changed`: when a button is pressed or released.
 + `button_press`: when a button is pressed.
 + `button_release`: When a button is released.
 
 Note that those low level events will only be useful in special circumstances.
+
+The last event shows the ***calibration*** output:
++ `calibration`: Shows informations from a calibration
+
+## Configuration Node properties
+To define the timings of a click-action a configuration node is needed with the folowing properties.
+
+***REMARK: The timings can be defined manualy or can be measured by the calibration procedure as mentioned above.***
+
+### Clicked
+Specifies the interval (in milliseconds) to wait - after a button is released - before generating a `clicked` event.  When a second click arrives within the *"Clicked"* interval, then both clicks will be combined to a `double-click` event.
+
+### Pressed
+Specifies the interval (in milliseconds) to wait - after a button is pressed - before generating a `pressed` event.  When the button is not being released within this interval, the button is kept down, e.g. for dimming a light.
+
+### Debounce
+Specifies the interval (in milliseconds) to wait before considering the input signal to have stabilized.  Within this time interval, all new input messages that arrive will be ignored.
