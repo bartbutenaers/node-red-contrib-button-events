@@ -225,10 +225,12 @@
                     // We have specified above that usePullUp=false, which means (similar to a pull-down resistor behaviour) that:
                     // - A button down means that we measure a '1' (high signal)
                     // - A button up means that we measure a '0' (low signal)
-                    if (inputValue == node.downValue) {
+                    // To support equality checks for booleans, we will add a "" to convert all values to strings.
+                    // See https://github.com/bartbutenaers/node-red-contrib-button-events/issues/10
+                    if (inputValue + "" == node.downValue + "") {
                         inputValue = 1;
                     }
-                    else if (inputValue == node.upValue) {
+                    else if (inputValue + "" == node.upValue + "") {
                         inputValue = 0;
                     }
                     else {
