@@ -53,16 +53,16 @@ REMARK: that you need to specify (in the config screen) for every required event
 ## Calibration
 In most cases the default timing settings will be fine.  However it is possible to change the default settings.  Since it is not always easy to determine timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
 
-Note that it is ***NOT*** the intension to do a calibration for each separate kind of event (single click, double click, ...).  Instead the calbration is ***ONLY*** used to determine how long this node needs to wait for signal changes, before it is allowed analyze the signal changes and send an output message.  
+Note that it is ***NOT*** the intension to do a calibration for each separate kind of event (single click, double click, ...).  Instead the calbration is ***ONLY*** used to determine how long this node needs to wait for signal changes, before it is allowed analyze the signal changes and send an output message.  The calibration will measure both the down and up times, to calculate the average pressing and release times. 
 
 As a result:
-+ If you click slowly during calibration, then the analysis time interval will be longer afterwards when using this node to analyze button events (which means the output messages with the events will have a larger reaction time):
++ If you click *slowly* during calibration, then the analysis time interval will be longer afterwards when using this node to analyze button events (which means the output messages with the events will have a larger reaction time):
 
-   ![image](https://user-images.githubusercontent.com/14224149/193455761-a681bbf0-4a26-4718-b6b9-c797580d2386.png)
+   ![image](https://user-images.githubusercontent.com/14224149/193474175-286f4809-0bf0-497b-903c-6e2886679056.png)
 
 + If you click fast during calibration, then the analysis time interval will be shorter afterwards when using this node to analyze button events (which means the output messages with the events will have a smaller reaction time):
 
-   ![image](https://user-images.githubusercontent.com/14224149/193455937-7a27b0a1-714b-4ae6-a2a5-ba810ab7116c.png)
+   ![image](https://user-images.githubusercontent.com/14224149/193474208-c2299016-4584-457b-826e-f72f256a66d5.png)
 
 ### Calibration procedure:
 1. Import the folowing flow
