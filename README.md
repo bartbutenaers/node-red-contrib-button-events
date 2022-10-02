@@ -51,8 +51,18 @@ The detected event name will also be displayed in the status of the node.
 REMARK: that you need to specify (in the config screen) for every required event, on which output it needs to be sent!  So by default this node won't have any outputs.
 
 ## Calibration
-Since it is not always easy to determine timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
+In most cases the default timing settings will be fine.  However it is possible to change the default settings.  Since it is not always easy to determine timing settings, this node offers a calibration feature.  This way you can determine timing values for your specific usage.
 
+Note that it is ***NOT*** the intension to do a calibration for each separate kind of event (single click, double click, ...).  Instead the calbration is ***ONLY*** used to determine how long this node needs to wait for signal changes, before it is allowed analyze the signal changes and send an output message.  
+
+As a result:
++ If you click slowly during calibration, then the analysis time interval will be longer afterwards when using this node to analyze button events (which means the output messages with the events will have a larger reaction time):
+
+   ![image](https://user-images.githubusercontent.com/14224149/193455761-a681bbf0-4a26-4718-b6b9-c797580d2386.png)
+
++ If you click fast during calibration, then the analysis time interval will be shorter afterwards when using this node to analyze button events (which means the output messages with the events will have a smaller reaction time):
+
+   ![image](https://user-images.githubusercontent.com/14224149/193455937-7a27b0a1-714b-4ae6-a2a5-ba810ab7116c.png)
 
 ### Calibration procedure:
 1. Import the folowing flow
@@ -62,11 +72,12 @@ Since it is not always easy to determine timing settings, this node offers a cal
 [{"id":"6ebfda0f85a08768","type":"button-events","z":"6063841c422bab25","name":"","outputs":1,"inputField":"payload","inputFieldType":"msg","outputField":"payload","outputFieldType":"msg","downValue":"0","downValueType":"num","upValue":"1","upValueType":"num","idleValue":"1","clickedInterval":200,"pressedInterval":200,"debounceInterval":30,"events":[{"type":"calibration"}],"x":900,"y":520,"wires":[["06d7b9c99cf0e9cc"]]},{"id":"3fb1bc7ff4d94f8a","type":"inject","z":"6063841c422bab25","name":"start calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"start_calibration","x":660,"y":520,"wires":[["6ebfda0f85a08768"]]},{"id":"d181c5bd13d8ecb8","type":"inject","z":"6063841c422bab25","name":"stop calibration","props":[{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"stop_calibration","x":660,"y":640,"wires":[["6ebfda0f85a08768"]]},{"id":"a5b7d28af974a2a3","type":"inject","z":"6063841c422bab25","name":"0","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"num","x":690,"y":560,"wires":[["6ebfda0f85a08768"]]},{"id":"d979a26f00068083","type":"inject","z":"6063841c422bab25","name":"1","props":[{"p":"payload"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":690,"y":600,"wires":[["6ebfda0f85a08768"]]},{"id":"06d7b9c99cf0e9cc","type":"debug","z":"6063841c422bab25","name":"Calibration output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":1150,"y":520,"wires":[]}]
 ```
 
-3. Start the calibration for 3 minutes by injecting a message with topic *"start_calibration"*.
-4. Repeat the button actions at least 10 times to get a reliable calibration result. Do this in the slowest speed you would like to detec multiclicks. Perform "thentime_click" action.
-5. Stop the calibration by injecting a message with topic *"stop_calibration"*.
-6. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
-7. Apply those settings to this node by copying the calibration results into the config screen of this node:
+2. Start the calibration by injecting a message with topic *"start_calibration"*.
+3. Repeat the button actions at least 10 times to get a reliable (average) calibration result. Do this in the slowest speed you would like to detec multiclicks. Perform the "time_click" action.
+4. Stop the calibration by injecting a message with topic *"stop_calibration"*.
+   Note: the calibration will stop automatically after 3 minutes anyway, is to avoid confusion when you would forget to stop the calibration. 
+5. An output message will appear in the Debug sidebar, containing the calculated calibration settings.
+6. Apply those settings to this node by copying the calibration results into the config screen of this node:
 
    ![calibration result](https://user-images.githubusercontent.com/16190614/183250927-90e3681e-b8e1-446c-8a26-361ed8c8b137.jpg)
 
